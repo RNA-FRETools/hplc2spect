@@ -1098,7 +1098,7 @@ setappdata(main, 'tick_manual', 0);
         path = mfilename('fullpath');
         [pathstr, ~, ~] = fileparts(path);
         try
-            htmlFile = [pathstr filesep 'docs' filesep 'README.html'];
+            htmlFile = [pathstr filesep 'README.html'];
             url = ['file:///',htmlFile];
             web(url)
         catch
