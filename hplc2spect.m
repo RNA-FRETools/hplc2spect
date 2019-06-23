@@ -385,7 +385,7 @@ setappdata(main, 'tick_manual', 0);
         
     end
 
-    function posInd = pos2Ind(x)
+    function posInd = pos2Ind(x, varargin)
         times = getappdata(main, 'times');
         wavelengths = getappdata(main, 'wavelengths');
         traceVal = get(select_trace, 'Value');
@@ -394,8 +394,14 @@ setappdata(main, 'tick_manual', 0);
         [~, ind1] = min(abs(times{traceVal}-x(1)));
         [~, ind2] = min(abs(wavelengths{traceVal}-x(2)));
         
+        % position on previous image
+        if nargin > 1
+            traceValPrev = getappdata(main, 'traceValPrev');
+            [~, ind1] = min(abs(times{traceValPrev}-x(1)));
+            [~, ind2] = min(abs(wavelengths{traceValPrev}-x(2)));
+        end
+        
         posInd = [ind1 ind2];
-        setappdata(main, 'posInd', posInd)
     end
 
 
@@ -528,7 +534,7 @@ setappdata(main, 'tick_manual', 0);
             
             % get position index
             pos = getappdata(main, 'pos');
-            posInd = pos2Ind(pos);
+            posInd = pos2Ind(pos, 'prev');
             
             % draw selection lines
             p3 = getappdata(main, 'p3');
