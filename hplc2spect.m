@@ -594,6 +594,9 @@ setappdata(main, 'tick_manual', 0);
             home_dir = getenv('HOME');
         end
         
+        traceName = get(select_trace, 'String');
+        traceVal = get(select_trace, 'Value');
+        
         savepathname = uigetdir(sprintf('%s/Desktop', home_dir), 'Save As');
         if savepathname == 0
             return
@@ -619,8 +622,10 @@ setappdata(main, 'tick_manual', 0);
         set(cb, 'linewidth', 1)
         
         set(main, 'papersize', [19 10], 'paperposition', [0.5 0.8 18.5 9.5])
+        filename = traceName{traceVal}(1:end-4);
         try
-            print('-dpdf',sprintf('%s/hplc_chromatogram.pdf', savepathname));
+            %print('-dpdf',sprintf('%s/hplc_chromatogram.pdf', savepathname));
+            print('-dpng', sprintf('%s/%s.png', savepathname, filename), '-r600');
         catch
             set(infoBox, 'String', 'printing failed - close the currently opened output-pdf file')
             
