@@ -339,9 +339,9 @@ setappdata(main, 'tick_manual', 0);
         traceVal = get(select_trace, 'Value');
         
         % draw custom rectangle
-        h = imrect(ax); %#ok<IMRECT>
+        h = drawrectangle(ax); %#ok<IMRECT>
         %setColor(h, [0.8 0.8 0.8])
-        posRect = getPosition(h);
+        posRect = h.Position;
         
         % get position index of rectangle
         posRectInd = posRect;
@@ -610,22 +610,20 @@ setappdata(main, 'tick_manual', 0);
         set(infoBox, 'visible', 'off')
         
         fontsize = get(ax, 'FontSize');
-        set(ax, 'FontSize', 15)
         cb = getappdata(main, 'cb');
         p3 = getappdata(main, 'p3');
         p4 = getappdata(main, 'p4');
-        set(p3, 'linewidth', 1)
-        set(p4, 'linewidth', 1)
-        set(ax, 'linewidth', 1)
+        set(ax, 'FontSize', 15, 'linewidth', 1)
         set(axSpect, 'linewidth', 1)
         set(axRet, 'linewidth', 1)
         set(cb, 'linewidth', 1)
         
-        set(main, 'papersize', [19 10], 'paperposition', [0.5 0.8 18.5 9.5])
+        %set(main, 'papersize', [19 10], 'paperposition', [0.5 0.8 18.5 9.5])
         filename = traceName{traceVal}(1:end-4);
         try
             %print('-dpdf',sprintf('%s/hplc_chromatogram.pdf', savepathname));
-            print('-dpng', sprintf('%s/%s.png', savepathname, filename), '-r600');
+            %print('-dpng', sprintf('%s/%s.png', savepathname, filename), '-r600');
+            exportgraphics(main, sprintf('%s/%s.png', savepathname, filename), "Resolution", 600)
         catch
             set(infoBox, 'String', 'printing failed - close the currently opened output-pdf file')
             
@@ -636,12 +634,10 @@ setappdata(main, 'tick_manual', 0);
             set(select_trace, 'visible', 'on')
             set(infoBox, 'visible', 'on')
             
-            set(p3, 'linewidth', 0.5)
-            set(p4, 'linewidth', 0.5)
             set(ax, 'FontSize', fontsize, 'linewidth', 0.5)
             set(axSpect, 'linewidth', 0.5)
             set(axRet, 'linewidth', 0.5)
-            set(cb, 'linewidth', 1)
+            set(cb, 'linewidth', 0.5)
             return
         end
         
@@ -652,8 +648,6 @@ setappdata(main, 'tick_manual', 0);
         set(select_trace, 'visible', 'on')
         set(infoBox, 'visible', 'on')
         
-        set(p3, 'linewidth', 0.5)
-        set(p4, 'linewidth', 0.5)
         set(ax, 'FontSize', fontsize, 'linewidth', 0.5)
         set(axSpect, 'linewidth', 0.5)
         set(axRet, 'linewidth', 0.5)
@@ -922,7 +916,7 @@ setappdata(main, 'tick_manual', 0);
         
         waveStringStart = uicontrol('Style','text',...
             'String',sprintf('start wavelength: %d nm', min(wavelengths{traceVal})),...
-            'HorizontalAlignment', 'left',...
+            'HorizontalAlignment', 'left', ...
             'Position',[135,120,200,15]);
         
         function chooseWaveStart(~,~)
